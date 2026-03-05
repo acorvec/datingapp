@@ -1,0 +1,42 @@
+{
+    "name": "Andrew",
+    "birthday": "2005-07-27",
+    "gender": "male",
+    "mainImage": "images/andrew.corvec/002.webp",
+    "accountDisabled": false,
+    "recommendedContacts": {
+        "paragraphs": [
+            "To contact me, just DM me on Instagram! My DMs are open."
+        ],
+        "instagram": "indellable_hates_handles"
+    },
+    "bios": [
+        {
+            "title": "Bio",
+            "paragraphs": [
+                "Cashier by day, software developer by night. Either way, I'm good with my hands."
+            ]
+        },
+        {
+            "precedingImage": "images/andrew.corvec/001.webp",
+            "title": "Future-proof",
+            "paragraphs": [
+                "Do you want your boyfriend to be an investment? If so, I'm the right guy for you. As a web developer, within a few years, I'll be financially secure (probably)."
+            ]
+        },
+        {
+            "title": "Location",
+            "paragraphs": [
+                "You can contact me if you're in the local area. If not, then feel free to contact me anyways, but I probably can't fly out."
+            ]
+        }
+    ],
+    "preferences": {
+        "kids": false,
+        "income": 0,
+        "education": "-",
+        "dealbreaker": "Country girls"
+    },
+    "interests": ["Computers", "Going out for dinner", "Having the odd drink"],
+    "contact": ["Use the bar at the top to find out ways you can contact me."]
+}

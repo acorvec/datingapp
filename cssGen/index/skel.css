@@ -1,0 +1,89 @@
+h1 {
+    font-size: 9vw;
+    line-height: 0;
+    margin-top: 10vw;
+    margin-bottom: 15vw;
+}
+
+span#authorName {
+    font-weight: 600;
+}
+
+span#authorAge {
+    font-weight: 400;
+}
+
+h2 {
+    font-size: 7vw;
+    font-weight: 600;
+    line-height: 0;
+    margin-top: 10vw;
+}
+
+ul {
+    margin: 0;
+}
+
+li {
+    line-height: 200%;
+}
+
+p {
+    line-height: 175%;
+}
+
+img#mainPicture {
+    width: 100%;
+    border-bottom-left-radius: 5vw;
+    border-bottom-right-radius: 5vw;
+    position: relative;
+}
+
+img.bioPicture {
+    width: 100%;
+    border-radius: 5vw;
+    position: relative;
+    margin-top: 0.6vw;
+}
+
+@media only screen and (orientation: landscape) {
+    body {
+        font-size: 2.4vh;
+    }
+
+    h1 {
+        margin-top: 6vh;
+        margin-bottom: 10vh;
+    }
+
+    span#authorName {
+        font-size: 4.5vh;
+    }
+
+    span#authorAge {
+        font-size: 4.5vh;
+    }
+
+    h2 {
+        font-size: 3vh;
+        margin-top: 6vh;
+        margin-bottom: 3.5vh;
+    }
+
+    a.bioLink {
+        font-size: 2.4vh;
+    }
+
+    p.contactParagraph {
+        font-size: 2.4vh;
+    }
+
+    img#mainPicture {
+        border-bottom-left-radius: 5vh;
+        border-bottom-right-radius: 5vh;
+    }
+
+    img.bioPicture {
+        border-radius: 5vh;
+    }
+}

@@ -1,0 +1,21 @@
+    #mainContent
+        - let altText = "A picture of " + author.name;
+        img#mainPicture(src="/" + author.mainImage alt=altText)
+        h1#pageTitle= "Other Singles"
+
+        - const calculatePronoun = (gender) => {
+        -   if (gender === "male") return "he's";
+        -   else if (gender === "female") return "she's";
+        -   else return "they're";
+        - };
+        - const pronoun = calculatePronoun(author.gender);
+        p#pageDescription
+            span Want to give up on #{author.name}? 
+            span We think #{pronoun} great, but we also have other singles!
+
+        each other in otherAuthors
+            - altText = "A picture of " + other.name
+            img#otherPicture(src="/" + other.mainImage alt=altText)
+            a.otherLink(href="/" + other.fileName + "/")
+                span.otherName #{other.name}
+                span.otherAge , #{other.age}

@@ -1,0 +1,194 @@
+html 
+    head 
+        title %title
+        style
+            #{styles.skel}
+            #{styles.dark}
+        script(type="text/javascript").
+            const doLogging = true;
+            function log(obj) {
+                if (doLogging) console.log(obj);
+            }
+
+            const switchToLightModeText = "Light Mode";
+            const switchToDarkModeText = "Dark Mode";
+
+            const defaultThemeSelectionMode = "dark-only";
+            // const defaultThemeSelectionMode = "use-preference";
+
+            const styleObj = { element: undefined, textNode: undefined };
+
+            const initialThemeStorage = localStorage.getItem("theme");
+            if (initialThemeStorage) {
+                const message =
+                    `initial theme is set to ` +
+                    `${initialThemeStorage} from last session`;
+                log(message);
+            }
+            else log("initial theme is unset");
+
+            function arrayOfUndefined() {
+                const result = new Array(length);
+                return result.fill(undefined);
+            }
+
+            function pagePath() {
+                const splitted = window.location.href.split('/');
+                const startIndex = 3;
+                const length = splitted.length - startIndex;
+                const endIndex = startIndex + length;
+
+                const tokens = arrayOfUndefined(length);
+                for (let i = startIndex; i < endIndex; i++)
+                    tokens[i - startIndex] = splitted[i];
+                return '/' + tokens.join('/');
+            }
+
+            function pathsEqual(path1, path2) {
+                const verbatim = path1 === path2;
+                const addedSlash1 = path1 + '/' === path2;
+                const addedSlash2 = path1 === path2 + '/';
+                return verbatim || addedSlash1 || addedSlash2;
+            }
+
+            function setThemeButtonText(text) {
+                const buttonName = "toggleThemesButton";
+                const toggleThemesButton = document.getElementById(buttonName);
+                if (toggleThemesButton) toggleThemesButton.innerText = text;
+            }
+
+            function applyStyles(styles) {
+                // create a style element with the inner text
+                // set to the calculated css code
+                const cssCode = styles.join("\n\n");
+                if (styleObj.element.styleSheet)
+                    styleObj.element.styleSheet.innerText = cssCode;
+                else styleObj.textNode.nodeValue = cssCode;
+            }
+
+            function loadDarkMode() {
+                log("loading dark mode");
+
+                const styles = [
+                    !{JSON.stringify(styles.skel)},
+                    !{JSON.stringify(styles.dark)}
+                ];
+                applyStyles(styles);
+
+                localStorage.setItem("theme", "dark");
+            }
+
+            function loadLightMode() {
+                log("loading light mode");
+
+                const styles = [
+                    !{JSON.stringify(styles.skel)},
+                    !{JSON.stringify(styles.light)}
+                ];
+                applyStyles(styles);
+
+                localStorage.setItem("theme", "light");
+            }
+
+            function toggleThemes() {
+                log("toggling themes");
+
+                const storage = localStorage.getItem("theme");
+                if (storage === "dark") loadLightMode();
+                else if (storage === "light") loadDarkMode();
+                else {
+                    log("bad enum value");
+                    loadDarkMode();
+                }
+            }
+
+            function setup() {
+                log("running theme selection setup");
+
+                // create style element; append to the head element
+                styleObj.element = document.createElement("style");
+                if (!styleObj.element.styleSheet) {
+                    styleObj.textNode = document.createTextNode("");
+                    styleObj.element.appendChild(styleObj.textNode);
+                }
+
+                const byTagName = document.getElementsByTagName("head");
+                const head = document.head || byTagName;
+
+                head.appendChild(styleObj.element);
+            }
+
+            function setThemeUsingPreference() {
+                log("setting the theme using browser's preferences");
+
+                // check for dark mode
+                let darkMode = window.matchMedia;
+                if (darkMode) {
+                    const query = window.matchMedia("(prefers-color-scheme: dark)");
+                    darkMode &= query.matches;
+                }
+
+                // load the appropriate theme
+                if (darkMode) loadDarkMode();
+                else loadLightMode();
+            }
+
+            function setDefaultTheme() {
+                setup();
+
+                if (defaultThemeSelectionMode === "dark-only")
+                    loadDarkMode();
+                else if (defaultThemeSelectionMode === "use-preference")
+                    setThemeUsingPreference();
+                else {
+                    log("bad enum value");
+                    loadDarkMode();
+                }
+            }
+
+            function setStorageTheme() {
+                log("loading theme from local storage");
+                setup();
+
+                const storage = localStorage.getItem("theme");
+                if (storage === "dark") loadDarkMode();
+                else if (storage === "light") loadLightMode();
+                else {
+                    log("bad enum value");
+                    loadDarkMode();
+                }
+            }
+
+            function hideUnneededButtons() {
+                // hide the button whose href matches the current path
+                const buttonIds = [
+                    "homeButton",
+                    "contactButton",
+                    "othersButton" ];
+                const pathToMatch = pagePath();
+
+                for (const index in buttonIds) {
+                    const id = buttonIds[index];
+                    const button = document.getElementById(id);
+                    const href = button.getAttribute("href");
+                    if (pathsEqual(href, pathToMatch)) button.remove();
+                }
+            }
+
+            window.onload = () => {
+                // if the storage has a theme set, load it;
+                // otherwise, load the default theme
+                const storage = localStorage.getItem("theme");
+                const setTheme = storage ? setStorageTheme : setDefaultTheme;
+
+                hideUnneededButtons();
+                setTheme();
+            };
+
+    body 
+        #mainContentBacking 
+            #navbar
+                #innerNavbar
+                    a.navbarLinks#homeButton(href="/" + author.fileName)= author.name + "'s Page" 
+                    a.navbarLinks#contactButton(href="/" + author.fileName + "/contact")= "Contact" 
+                    a.navbarLinks#othersButton(href="/" + author.fileName + "/others")= "Other Singles" 

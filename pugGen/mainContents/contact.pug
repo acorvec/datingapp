@@ -1,0 +1,18 @@
+    #mainContent 
+        - const altText = `A picture of ${author.name}`;
+        img#mainPicture(src="/" + author.mainImage, alt=altText)
+        h1#pageTitle Contact #{author.name}
+
+        - const instagram = author.recommendedContacts.instagram;
+        if instagram !== undefined 
+            - const instagramUrl = "https://www.instagram.com/" + instagram + "/";
+            p
+                span#instagramLabel IG: 
+                a#instagramLink(href=instagramUrl) #{instagram}
+
+        each paragraph in author.recommendedContacts.paragraphs 
+            p.contactParagraph= paragraph 
+
+        - const email = author.recommendedContacts.email;
+        if email !== undefined 
+            a#emailLink(href="mailto:" + email)=email

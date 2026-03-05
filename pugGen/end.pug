@@ -1,0 +1,7 @@
+    #footer 
+        span.footerParagraph= "Website coded and administered by " + admin.name + ". "
+        span.footerParagraph= "You can find his page on this website "
+        a.footerLink(href="/" + admin.page)= "here" 
+        span.footerParagraph= "."
+        p.footerParagraph= "Please send any administrative inquiries to:"
+        a.footerLink(href="mailto:" + admin.email)= admin.email

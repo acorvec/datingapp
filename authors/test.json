@@ -1,0 +1,43 @@
+{
+    "name": "Tessa",
+    "birthday": "1997-09-12",
+    "gender": "female",
+    "mainImage": "images/sweeney.test/002.webp",
+    "accountDisabled": false,
+    "recommendedContacts": {
+        "paragraphs": [
+            "Please email me. I do not bother with earthly dealings such as Instagram."
+        ],
+        "email": "sweeney.test@gmail.com"
+    },
+    "bios": [
+        {
+            "title": "Bio",
+            "paragraphs": [
+                "Hello. I am Tessa Ting. I enjoy common human activities."
+            ]
+        },
+        {
+            "precedingImage": "images/sweeney.test/001.webp",
+            "title": "Career",
+            "paragraphs": [
+                "I am an android.",
+                "I operate for the benefit of my owners."
+            ]
+        },
+        {
+            "title": "Location",
+            "paragraphs": [
+                "I am located in cyber-space."
+            ]
+        }
+    ],
+    "preferences": {
+        "kids": false,
+        "income": 300000,
+        "education": "uni",
+        "dealbreaker": "Losers"
+    },
+    "interests": ["Existing", "Breathing", "Being human"],
+    "contact": ["Use the bar at the top to find me, okay?"]
+}

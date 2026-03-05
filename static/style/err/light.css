@@ -1,0 +1,22 @@
+body {
+    background-color: rgb(235, 235, 255);
+    color: rgb(5, 5, 15);
+}
+
+h1 {
+    background-color: rgb(150, 25, 25);
+    color: rgb(235, 235, 255);
+}
+
+a {
+    background-color: rgb(140, 60, 20);
+    color: rgb(235, 235, 255);
+}
+
+#footer {
+    background-color: rgb(170, 170, 230);
+}
+
+a.footerLink {
+    color: rgb(5, 5, 15);
+}

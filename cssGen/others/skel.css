@@ -1,0 +1,55 @@
+h1#pageTitle {
+    font-size: 7vw;
+    font-weight: 600;
+}
+
+p#pageDescription {
+    font-weight: 400;
+}
+
+a.otherLink {
+    line-height: 300%;
+}
+
+span.otherName {
+    font-size: 5.5vw;
+    font-weight: 600;
+}
+
+span.otherAge {
+    font-size: 5.5vw;
+    font-weight: 400;
+}
+
+img#mainPicture {
+    width: 100%;
+    border-bottom-left-radius: 5vw;
+    border-bottom-right-radius: 5vw;
+    position: relative;
+}
+
+img#otherPicture {
+    width: 100%;
+    border-radius: 5vw;
+    position: relative;
+    margin-top: 1.2vw;
+    margin-bottom: 1.8vw;
+}
+
+@media only screen and (orientation: landscape) {
+    h1#pageTitle {
+        font-size: 3vh;
+    }
+
+    p#pageDescription {
+        font-size: 2.5vh;
+    }
+
+    span.otherName {
+        font-size: 2.5vh;
+    }
+
+    span.otherAge {
+        font-size: 2.5vh;
+    }
+}

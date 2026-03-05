@@ -1,0 +1,130 @@
+html 
+  head 
+    title= "Error occurred"
+    link(rel="stylesheet" href="/style/err/skel.css")
+    link(rel="stylesheet" href="/style/err/dark.css")
+    script(type="text/javascript").
+      const doLogging = true;
+      function log(obj) {
+        if (doLogging) console.log(obj);
+      }
+
+      const switchToLightModeText = "Light Mode";
+      const switchToDarkModeText = "Dark Mode";
+
+      const defaultThemeSelectionMode = "dark-only";
+      // const defaultThemeSelectionMode = "use-preference";
+
+      const styleObj = { element: undefined, textNode: undefined };
+
+      const initialThemeStorage = localStorage.getItem("theme");
+      if (initialThemeStorage) {
+        const message =
+          `initial theme is set to ` +
+          `${initialThemeStorage} from last session`;
+        log(message);
+      }
+      else log("initial theme is unset");
+
+      function applyStyles(styles) {
+        // create a style element with the inner text set to the styles
+        if (styleObj.element.styleSheet)
+          styleObj.element.styleSheet.innerText = styles;
+        else styleObj.textNode.nodeValue = styles;
+      }
+
+      function loadDarkMode() {
+        log("loading dark mode");
+
+        const styles = !{JSON.stringify(darkModeStyles)};
+        applyStyles(styles);
+
+        localStorage.setItem("theme", "dark");
+      }
+
+      function loadLightMode() {
+        log("loading light mode");
+
+        const styles = !{JSON.stringify(lightModeStyles)};
+        applyStyles(styles);
+
+        localStorage.setItem("theme", "light");
+      }
+
+      function toggleThemes() {
+        log("toggling themes");
+
+        const storage = localStorage.getItem("theme");
+        if (storage === "dark") loadLightMode();
+        else if (storage === "light") loadDarkMode();
+        else {
+          log("bad enum value");
+          loadDarkMode();
+        }
+      }
+
+      function setup() {
+        log("running theme selection setup");
+
+        // create style element; append to the head element
+        styleObj.element = document.createElement("style");
+        if (!styleObj.element.styleSheet) {
+          styleObj.textNode = document.createTextNode("");
+          styleObj.element.appendChild(styleObj.textNode);
+        }
+
+        const byTagName = document.getElementsByTagName("head");
+        const head = document.head || byTagName;
+
+        head.appendChild(styleObj.element);
+      }
+
+      function setThemeUsingPreference() {
+        log("setting the theme using browser's preferences");
+
+        // check for dark mode
+        let darkMode = window.matchMedia;
+        if (darkMode) {
+          const query = window.matchMedia("(prefers-color-scheme: dark)");
+          darkMode &= query.matches;
+        }
+
+        // load the appropriate theme
+        if (darkMode) loadDarkMode();
+        else loadLightMode();
+      }
+
+      function setDefaultTheme() {
+        setup();
+
+        if (defaultThemeSelectionMode === "dark-only")
+          loadDarkMode();
+        else if (defaultThemeSelectionMode === "use-preference")
+          setThemeUsingPreference();
+        else {
+          log("bad enum value");
+          loadDarkMode();
+        }
+      }
+
+      function setStorageTheme() {
+        log("loading theme from local storage");
+        setup();
+
+        const storage = localStorage.getItem("theme");
+        if (storage === "dark") loadDarkMode();
+        else if (storage === "light") loadLightMode();
+        else {
+          log("bad enum value");
+          loadDarkMode();
+        }
+      }
+
+      // do not set the theme when the window loads if the theme storage is already set
+      const storage = localStorage.getItem("theme");
+      window.onload = storage ? setStorageTheme : setDefaultTheme;
+
+  body 
+    h1= "An error occurred."
+    p Error reason: #{message}
+    a(href="/andrew/")= "Go Home"

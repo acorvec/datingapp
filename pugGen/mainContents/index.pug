@@ -1,0 +1,94 @@
+    #mainContent
+        - const altText = "A picture of " + author.name
+        img#mainPicture(src="/" + author.mainImage, alt=altText)
+        h1
+            span#authorName #{author.name}
+            span#authorAge , #{author.age}
+
+        - const checkForLink = (bio, paragraphIndex) => {
+        -   // check if the current paragraph index is a link
+        -   if (bio.links === undefined) return undefined;
+        -   for (const link of bio.links)
+        -       if (paragraphIndex === link.paragraphIndex) return link;
+        -   return undefined;
+        - }
+        - const getStart = (paragraph, characterRange) => {
+        -   const range = characterRange;
+        -   return paragraph.substring(0, range.start);
+        - }
+        - const getMiddle = (paragraph, characterRange) => {
+        -   const range = characterRange;
+        -   return paragraph.substring(range.start, range.end);
+        - }
+        - const getEnd = (paragraph, characterRange) => {
+        -   const range = characterRange;
+        -   return paragraph.substring(range.end);
+        - }
+        each bio in author.bios
+            if bio.precedingImage !== undefined
+                img.bioPicture(src="/" + bio.precedingImage, alt=altText)
+            h2.bioLabel= bio.title
+            - let paragraphIndex = 0;
+            each paragraph in bio.paragraphs
+                - const link = checkForLink(bio, paragraphIndex)
+                if link
+                    p.bioParagraph 
+                        - const start = getStart(paragraph, link.characterRange)
+                        - const middle = getMiddle(paragraph, link.characterRange)
+                        - const end = getEnd(paragraph, link.characterRange)
+
+                        span= start
+                        a.bioLink(href=link.href)= middle
+                        span= end
+                else 
+                    p.bioParagraph #{paragraph}
+                - paragraphIndex += 1;
+
+        h2#preferencesLabel= "Preferences"
+        - const getShrug = (gender) => {
+        -   if (gender === "female") return "🤷‍♀️";
+        -   else return "🤷"; 
+        - };
+        - const calculateKids = (pref) => {
+        -   if (pref === false) return "Do not want 🚫";
+        -   else if (pref === true) return "Want ✅";
+        -   else return noPreferenceMessage;
+        - };
+        - const calculateIncome = (pref) => {
+        -   if (pref === 0) return noPreferenceMessage;
+        -   else {
+        -       const roundedIncome = Math.round(pref / 1000)
+        -       return `$${roundedIncome}k or more 🤑`;
+        -   }
+        - };
+        - const calculateEducation = (pref) => {
+        -   if (pref === "uni") return "University 🎓";
+        -   else if (pref === "associate") return "Community college 🎓";
+        -   else if (pref === "high") return "High school diploma 🎓";
+        -   else return noPreferenceMessage;
+        - };
+        ul 
+            - const shrug = getShrug(author.gender);
+
+            - const noPreferenceMessage = "No preference " + shrug;
+
+            - const kidsPreference = calculateKids(author.preferences.kids);
+            li.preference Kids: #{kidsPreference}
+
+            - const cookedIncome = calculateIncome(author.preferences.income);
+            li.preference Income: #{cookedIncome}
+
+            - const uncookedEducation = author.preferences.education;
+            - const cookedEducation = calculateEducation(uncookedEducation);
+            li.preference Education: #{cookedEducation}
+
+            li.preference Dealbreaker: #{author.preferences.dealbreaker} 🚫
+
+        h2#interestsLabel= "Interests"
+        ul
+            each interest in author.interests 
+                li.interest= interest
+
+        h2#contactLabel= "Contact"
+        each contactParagraph in author.contact
+            p.contactParagraph= contactParagraph
