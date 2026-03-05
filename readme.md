@@ -2,9 +2,9 @@ datingapp is a simple dating web app made in Express.JS.
 
 ## Showcase
 
-<img src="https://github.com/acorvec/datingapp/raw/master/showcase/Screenshot_20251103_133323_Firefox.jpg" width="523" height="800"/>
+<img src="https://github.com/acorvec/datingapp/blob/main/showcase/Screenshot_20251103_133323_Firefox.jpg?raw=true" width="523" height="800"/>
 
-<img src="https://github.com/acorvec/datingapp/raw/master/showcase/Screenshot_20251103_133404_Firefox.jpg" width="523" height="918"/>
+<img src="https://github.com/acorvec/datingapp/blob/main/showcase/Screenshot_20251103_133404_Firefox.jpg?raw=true" width="523" height="918"/>
 
 ## Legal and Licensing
 
