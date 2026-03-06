@@ -10,4 +10,4 @@ datingapp is a simple dating web app made in Express.JS.
 
 This software is provided with no warranty. It may ruin your computer, and it will **NOT** be acorvec's responsibility. Please proceed with caution.
 
-Please contact for licensing. I'm always interested in collaborating, especially with others with more experience.
+Please contact for licensing. I'm always interested in collaborating, especially with others with more experience than myself.
