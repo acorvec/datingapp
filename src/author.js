@@ -22,8 +22,8 @@ function parseFromJson(jsonText) {
 }
 
 function parseFromFile(showErr, response, fileName) {
-    const authorPath = `../authors/${fileName}.json`;
-    const jsonText = helper.readFile(authorPath);
+    const userPath = `../users/${fileName}.json`;
+    const jsonText = helper.readFile(userPath);
     if (jsonText === undefined) {
         const message = `404: author not found "${fileName}".`;
         showErr(response, message);
@@ -32,7 +32,7 @@ function parseFromFile(showErr, response, fileName) {
 
     const result = parseFromJson(jsonText);
     if (result === undefined) {
-        const resolvedPath = helper.resolve(authorPath);
+        const resolvedPath = helper.resolve(userPath);
         const message = `Unable to parse JSON at path "${resolvedPath}"`;
         showErr(response, message);
         return undefined;
@@ -44,7 +44,7 @@ function parseFromFile(showErr, response, fileName) {
 
 function loadOthers(showErr, response, fileNameToExclude) {
     // get the directory listing
-    const directoryListing = fs.readdirSync("authors");
+    const directoryListing = fs.readdirSync("users");
 
     // pre-allocate an array of the expected size
     const expectedCount = directoryListing.length - 1;

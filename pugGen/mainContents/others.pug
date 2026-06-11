@@ -13,7 +13,7 @@
             span Want to give up on #{author.name}? 
             span We think #{pronoun} great, but we also have other singles!
 
-        each other in otherAuthors
+        each other in otherUsers
             - altText = "A picture of " + other.name
             img#otherPicture(src="/" + other.mainImage alt=altText)
             a.otherLink(href="/" + other.fileName + "/")

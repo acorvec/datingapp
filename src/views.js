@@ -27,7 +27,7 @@ function showView(
     response,
     authorFileName,
     viewName,
-    requiresOtherAuthors = false
+    requiresOtherUsers = false
 ) {
     const loadedAuthor = author.parseFromFile(
         showErr,
@@ -50,19 +50,19 @@ function showView(
     const adminText = helper.readFile("../meta/admin.json");
     const admin = helper.parseJson(adminText);
 
-    let otherAuthors = undefined;
-    if (requiresOtherAuthors) {
-        otherAuthors = author.loadOthers(showErr, response, authorFileName);
+    let otherUsers = undefined;
+    if (requiresOtherUsers) {
+        otherUsers = author.loadOthers(showErr, response, authorFileName);
         // if the loading failed,
         // then the loading function displays an error and returns undefined;
         // we should stop the function, as a page is already loaded
-        if (otherAuthors === undefined) return;
+        if (otherUsers === undefined) return;
     }
     const options = {
         author: loadedAuthor,
         styles: styles,
         admin: admin,
-        otherAuthors: otherAuthors,
+        otherUsers: otherUsers,
     };
 
     const gennedPug = pugGen(viewName);
@@ -83,7 +83,7 @@ module.exports = {
             response,
             authorFileName,
             "others",
-            (requiresOtherAuthors = true)
+            (requiresOtherUsers = true)
         );
     },
 };
