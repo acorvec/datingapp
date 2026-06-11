@@ -2,13 +2,13 @@
     "name": "Tessa",
     "birthday": "1997-09-12",
     "gender": "female",
-    "mainImage": "images/sweeney.test/002.webp",
+    "mainImage": "images/android.test/002.webp",
     "accountDisabled": false,
     "recommendedContacts": {
         "paragraphs": [
             "Please email me. I do not bother with earthly dealings such as Instagram."
         ],
-        "email": "sweeney.test@gmail.com"
+        "email": "android.test@gmail.com"
     },
     "bios": [
         {
@@ -18,7 +18,7 @@
             ]
         },
         {
-            "precedingImage": "images/sweeney.test/001.webp",
+            "precedingImage": "images/android.test/001.webp",
             "title": "Career",
             "paragraphs": [
                 "I am an android.",
@@ -39,5 +39,5 @@
         "dealbreaker": "Losers"
     },
     "interests": ["Existing", "Breathing", "Being human"],
-    "contact": ["Use the bar at the top to find me, okay?"]
+    "contact": ["Beep. Boop. Use the bar at the top to find me."]
 }
