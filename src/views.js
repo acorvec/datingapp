@@ -9,10 +9,10 @@ const pug = require("pug");
 function showErr(response, message) {
     const viewName = "err";
 
-    const darkModeStylePath = `../static/style/${viewName}/dark.css`;
+    const darkModeStylePath = `../public/style/${viewName}/dark.css`;
     const darkModeStyles = helper.readFile(darkModeStylePath);
 
-    const lightModeStylePath = `../static/style/${viewName}/light.css`;
+    const lightModeStylePath = `../public/style/${viewName}/light.css`;
     const lightModeStyles = helper.readFile(lightModeStylePath);
 
     const options = {

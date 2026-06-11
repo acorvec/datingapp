@@ -27,8 +27,8 @@ module.exports = {
         app.set("view engine", "pug");
     },
     useCalls: (app) => {
-        const staticDir = path.join(__dirname, "../static");
-        app.use(express.static(staticDir));
+        const publicDir = path.join(__dirname, "../public");
+        app.use(express.static(publicDir));
 
         app.use((request, response) => {
             if (request.method !== "GET") return;
