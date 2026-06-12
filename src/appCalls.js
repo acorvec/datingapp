@@ -3,24 +3,6 @@ const express = require("express");
 
 const views = require("./views.js");
 
-function isolateAuthorFileName(path) {
-    const splitPath = path.split("/");
-    if (splitPath.length >= 2) return splitPath[1];
-    else return undefined;
-}
-
-function isolateEndpoint(path) {
-    const splitPath = path.split("/");
-    const lastItem = splitPath[splitPath.length - 1];
-    let usedLength = 0;
-    if (lastItem === "") usedLength = splitPath.length - 1;
-    else usedLength = splitPath.length;
-    if (usedLength === 3) return splitPath[2];
-    else if (usedLength === 2) return "/";
-    else if (usedLength === 1) return "/";
-    else return undefined;
-}
-
 module.exports = {
     setCalls: (app) => {
         app.set("views", "./views");
@@ -30,32 +12,30 @@ module.exports = {
         const publicDir = path.join(__dirname, "../public");
         app.use(express.static(publicDir));
 
-        app.use((request, response, next) => {
-            if (request.method !== "GET") return;
+        const getAuthorFilename = (request) => {
+            let authorFileName = request.params.name;
+            if (!authorFileName)
+                authorFileName = 'andrew';
 
-            // parse the author's filename
-            let authorFileName = isolateAuthorFileName(request.url);
-            if (authorFileName.length === 0) authorFileName = "andrew";
-            if (authorFileName === undefined) {
-                const message = `404: page not found "${request.url}".`;
-                views.showErr(response, message);
-            }
-            // parse the subpage
-            const endpoint = isolateEndpoint(request.url);
-            switch (endpoint) {
-                case "/":
-                    views.showIndex(response, authorFileName, next);
-                    break;
-                case "contact":
-                    views.showContact(response, authorFileName, next);
-                    break;
-                case "others":
-                    views.showOthers(response, authorFileName, next);
-                    break;
-                default:
-                    const message = `404: page not found "${request.url}".`;
-                    views.showErr(response, message);
-            }
+            return { authorFileName: authorFileName };
+        };
+        const indexFn = (request, response, next) => {
+            const obj = getAuthorFilename(request);
+            views.showIndex(response, obj['authorFileName'], next);
+        };
+
+        app.get('/:name/index', indexFn);
+
+        app.get('/:name/contact', (request, response, next) => {
+            const obj = getAuthorFilename(request);
+            views.showContact(response, obj['authorFileName'], next);
         });
+        app.get('/:name/others', (request, response, next) => {
+            const obj = getAuthorFilename(request);
+            views.showOthers(response, obj['authorFileName'], next);
+        });
+        
+        app.get('/:name/', indexFn);
+        app.get('/', indexFn);
     },
 };
