@@ -3,16 +3,8 @@ const express = require("express");
 
 const views = require("./views.js");
 
-function isolateEndpoint(path) {
-    const splitPath = path.split("/");
-    const lastItem = splitPath[splitPath.length - 1];
-    let usedLength = 0;
-    if (lastItem === "") usedLength = splitPath.length - 1;
-    else usedLength = splitPath.length;
-    if (usedLength === 3) return splitPath[2];
-    else if (usedLength === 2) return "/";
-    else if (usedLength === 1) return "/";
-    else return undefined;
+function isRoot(path) {
+    return path.length === 1;
 }
 
 module.exports = {
@@ -36,22 +28,18 @@ module.exports = {
             views.showIndex(response, obj['authorFileName'], next);
         };
 
-        app.get('/:name/index', indexFn);
-
-        app.get('/:name/contact', (request, response, next) => {
+        app.get('/user/:name/profile/contact', (request, response, next) => {
             const obj = getAuthorFilename(request);
             views.showContact(response, obj['authorFileName'], next);
         });
-        app.get('/:name/others', (request, response, next) => {
+        app.get('/user/:name/profile/others', (request, response, next) => {
             const obj = getAuthorFilename(request);
             views.showOthers(response, obj['authorFileName'], next);
         });
-
-        app.get('/:name/', indexFn);
+        app.get('/user/:name/', indexFn);
 
         app.get('*', (request, response, next) => {
-            const endpoint = isolateEndpoint(request.url);
-            if (endpoint === '/') {
+            if (isRoot(request.url)) {
                 const obj = getAuthorFilename(request);
                 indexFn(request, response, next);
             }

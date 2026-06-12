@@ -16,6 +16,6 @@
         each other in otherUsers
             - altText = "A picture of " + other.name
             img#otherPicture(src="/" + other.mainImage alt=altText)
-            a.otherLink(href="/" + other.fileName + "/")
+            a.otherLink(href="/user/" + other.fileName)
                 span.otherName #{other.name}
                 span.otherAge , #{other.age}

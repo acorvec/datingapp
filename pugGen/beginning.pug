@@ -189,6 +189,6 @@ html
         #mainContentBacking 
             #navbar
                 #innerNavbar
-                    a.navbarLinks#homeButton(href="/" + author.fileName)= author.name + "'s Page" 
-                    a.navbarLinks#contactButton(href="/" + author.fileName + "/contact")= "Contact" 
-                    a.navbarLinks#othersButton(href="/" + author.fileName + "/others")= "Other Singles" 
+                    a.navbarLinks#homeButton(href="/user/" + author.fileName)= author.name + "'s Page" 
+                    a.navbarLinks#contactButton(href="/user/" + author.fileName + "/profile/contact")= "Contact" 
+                    a.navbarLinks#othersButton(href="/user/" + author.fileName + "/profile/others")= "Other Singles" 
