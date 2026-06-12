@@ -14,8 +14,8 @@ function selectTitle(viewName) {
     }
 }
 
-function generateBeginning(viewName) {
-    let result = helper.readFile("../pugGen/beginning.pug");
+async function generateBeginning(viewName) {
+    let result = await helper.readFile("../pugGen/beginning.pug");
 
     result = result.replaceAll("%title", selectTitle(viewName));
     result = result.replaceAll("%viewName", viewName);
@@ -23,22 +23,24 @@ function generateBeginning(viewName) {
     return result;
 }
 
-function generateMiddle(viewName) {
-    const result = helper.readFile(`../pugGen/mainContents/${viewName}.pug`);
+async function generateMiddle(viewName) {
+    const filePath = `../pugGen/mainContents/${viewName}.pug`;
+    const result = await helper.readFile(filePath);
     return helper.indentText(result, 2);
 }
 
-function generateEnd(viewName) {
-    const result = helper.readFile("../pugGen/end.pug");
+async function generateEnd(viewName) {
+    const result = await helper.readFile("../pugGen/end.pug");
     return helper.indentText(result, 2);
 }
 
-function generate(viewName) {
-    const parts = [
+async function generate(viewName) {
+    const promises = [
         generateBeginning(viewName),
         generateMiddle(viewName),
         generateEnd(viewName),
     ];
+    const parts = await Promise.all(promises);
     return parts.join("\n");
 }
 

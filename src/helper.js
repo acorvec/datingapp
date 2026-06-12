@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 
 function resolve(path) {
     try {
@@ -13,9 +13,9 @@ function arrayOfUndefined(length) {
     return result.fill(undefined);
 }
 
-function readFile(path) {
+async function readFile(path) {
     try {
-        return fs.readFileSync(resolve(path), "utf-8");
+        return await fs.readFile(resolve(path), "utf-8");
     } catch (err) {
         return undefined;
     }

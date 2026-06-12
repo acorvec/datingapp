@@ -1,56 +1,59 @@
 const helper = require("./helper");
 
-function readCssGenFile(filePath) {
-    return helper.readFile(`../cssGen/${filePath}.css`);
+async function readCssGenFile(filePath) {
+    return await helper.readFile(`../cssGen/${filePath}.css`);
 }
 
-function readStaticLightMode() {
-    return readCssGenFile("light");
+async function readStaticLightMode() {
+    return await readCssGenFile("light");
 }
 
-function readStaticDarkMode() {
-    return readCssGenFile("dark");
+async function readStaticDarkMode() {
+    return await readCssGenFile("dark");
 }
 
-function readStaticSkel() {
-    return readCssGenFile("skel");
+async function readStaticSkel() {
+    return await readCssGenFile("skel");
 }
 
-function readDarkModeMainContent(viewName) {
-    return readCssGenFile(viewName + "/dark");
+async function readDarkModeMainContent(viewName) {
+    return await readCssGenFile(viewName + "/dark");
 }
 
-function readLightModeMainContent(viewName) {
-    return readCssGenFile(viewName + "/light");
+async function readLightModeMainContent(viewName) {
+    return await readCssGenFile(viewName + "/light");
 }
 
-function readSkelMainContent(viewName) {
-    return readCssGenFile(viewName + "/skel");
+async function readSkelMainContent(viewName) {
+    return await readCssGenFile(viewName + "/skel");
 }
 
-function generateDarkMode(viewName) {
-    const parts = [readStaticDarkMode(), readDarkModeMainContent(viewName)];
-    return parts.join("\n\n");
+async function generateDarkMode(viewName) {
+    const promises = [readStaticDarkMode(), readDarkModeMainContent(viewName)];
+    const results = await Promise.all(promises);
+    return results.join("\n\n");
 }
 
-function generateLightMode(viewName) {
-    const parts = [readStaticLightMode(), readLightModeMainContent(viewName)];
-    return parts.join("\n\n");
+async function generateLightMode(viewName) {
+    const promises = [readStaticLightMode(), readLightModeMainContent(viewName)];
+    const results = await Promise.all(promises);
+    return results.join("\n\n");
 }
 
-function generateSkel(viewName) {
-    const parts = [readStaticSkel(), readSkelMainContent(viewName)];
-    return parts.join("\n\n");
+async function generateSkel(viewName) {
+    const promises = [readStaticSkel(), readSkelMainContent(viewName)];
+    const results = await Promise.all(promises);
+    return results.join("\n\n");
 }
 
-function generate(viewName, mode) {
+async function generate(viewName, mode) {
     switch (mode) {
         case "dark":
-            return generateDarkMode(viewName);
+            return await generateDarkMode(viewName);
         case "light":
-            return generateLightMode(viewName);
+            return await generateLightMode(viewName);
         case "skel":
-            return generateSkel(viewName);
+            return await generateSkel(viewName);
         default:
             throw new Error("invalid enum value");
     }

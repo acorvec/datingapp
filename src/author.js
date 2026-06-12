@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("fs").promises;
 const helper = require("./helper.js");
 
 function calculateAge(bday) {
@@ -21,12 +21,12 @@ function parseFromJson(jsonText) {
     return result;
 }
 
-function parseFromFile(showErr, response, fileName, next) {
+async function parseFromFile(showErr, response, fileName, next) {
     const userPath = `../users/${fileName}.json`;
-    const jsonText = helper.readFile(userPath);
+    const jsonText = await helper.readFile(userPath);
     if (jsonText === undefined) {
         const message = `404: author not found "${fileName}".`;
-        showErr(response, message, next);
+        await showErr(response, message, next);
         return undefined;
     }
 
@@ -34,7 +34,7 @@ function parseFromFile(showErr, response, fileName, next) {
     if (result === undefined) {
         const resolvedPath = helper.resolve(userPath);
         const message = `Unable to parse JSON at path "${resolvedPath}"`;
-        showErr(response, message);
+        await showErr(response, message, next);
         return undefined;
     }
 
@@ -42,9 +42,9 @@ function parseFromFile(showErr, response, fileName, next) {
     return result;
 }
 
-function loadOthers(showErr, response, fileNameToExclude, next) {
+async function loadOthers(showErr, response, fileNameToExclude, next) {
     // get the directory listing
-    const directoryListing = fs.readdirSync("users");
+    const directoryListing = await fs.readdir("users");
 
     // pre-allocate an array of the expected size
     const expectedCount = directoryListing.length - 1;
@@ -52,8 +52,8 @@ function loadOthers(showErr, response, fileNameToExclude, next) {
 
     // push the author if their account isn't disabled;
     // keep track of whether or not the author failed to load
-    const pushOther = (index, fileName) => {
-        const other = parseFromFile(showErr, response, fileName, next);
+    const pushOther = async (index, fileName) => {
+        const other = await parseFromFile(showErr, response, fileName, next);
         if (!other.accountDisabled) result[index] = other;
         return other !== undefined;
     };
@@ -62,7 +62,7 @@ function loadOthers(showErr, response, fileNameToExclude, next) {
         const fileSplit = directoryListing[index].split(".");
         const fileName = fileSplit[0];
         if (fileName !== fileNameToExclude) {
-            const succeeded = pushOther(index, fileName);
+            const succeeded = await pushOther(index, fileName);
             if (!succeeded) return undefined;
         }
     }

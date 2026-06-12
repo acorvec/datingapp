@@ -6,14 +6,18 @@ const cssGen = require("./cssGen.js");
 
 const pug = require("pug");
 
-function showErr(response, message, next) {
+async function showErr(response, message, next) {
     const viewName = "err";
 
     const darkModeStylePath = `../public/style/${viewName}/dark.css`;
-    const darkModeStyles = helper.readFile(darkModeStylePath);
-
     const lightModeStylePath = `../public/style/${viewName}/light.css`;
-    const lightModeStyles = helper.readFile(lightModeStylePath);
+
+    const promises = [
+        helper.readFile(darkModeStylePath), 
+        helper.readFile(lightModeStylePath)
+    ];
+    const darkModeStyles = await promises[0];
+    const lightModeStyles = await promises[1];
 
     const options = {
         message: message,
@@ -28,14 +32,14 @@ function showErr(response, message, next) {
     next(error);
 }
 
-function showView(
+async function showView(
     response,
     authorFileName,
     viewName,
     next,
     requiresOtherUsers = false
 ) {
-    const loadedAuthor = author.parseFromFile(
+    const loadedAuthor = await author.parseFromFile(
         showErr,
         response,
         authorFileName,
@@ -44,22 +48,28 @@ function showView(
     if (loadedAuthor === undefined) return;
     if (loadedAuthor.accountDisabled) {
         const message = `${loadedAuthor.name}'s account is disabled.`;
-        showErr(response, message, next);
+        await showErr(response, message, next);
         return;
     }
 
+    const promises = [
+        cssGen(viewName, "skel"),
+        cssGen(viewName, "dark"),
+        cssGen(viewName, "light")
+    ];
+
     const styles = {
-        skel: cssGen(viewName, "skel"),
-        dark: cssGen(viewName, "dark"),
-        light: cssGen(viewName, "light"),
+        skel: await promises[0],
+        dark: await promises[1],
+        light: await promises[2]
     };
 
-    const adminText = helper.readFile("../meta/admin.json");
+    const adminText = await helper.readFile("../meta/admin.json");
     const admin = helper.parseJson(adminText);
 
     let otherUsers = undefined;
     if (requiresOtherUsers) {
-        otherUsers = author.loadOthers(
+        otherUsers = await author.loadOthers(
             showErr, 
             response, 
             authorFileName, 
@@ -77,21 +87,21 @@ function showView(
         otherUsers: otherUsers,
     };
 
-    const gennedPug = pugGen(viewName);
+    const gennedPug = await pugGen(viewName);
     const renderedDoc = pug.render(gennedPug, options);
     response.send(renderedDoc);
 }
 
 module.exports = {
     showErr: showErr,
-    showIndex: (response, authorFileName, next) => {
-        showView(response, authorFileName, "index", next);
+    showIndex: async (response, authorFileName, next) => {
+        await showView(response, authorFileName, "index", next);
     },
-    showContact: (response, authorFileName, next) => {
-        showView(response, authorFileName, "contact", next);
+    showContact: async (response, authorFileName, next) => {
+        await showView(response, authorFileName, "contact", next);
     },
-    showOthers: (response, authorFileName, next) => {
-        showView(
+    showOthers: async (response, authorFileName, next) => {
+        await showView(
             response,
             authorFileName,
             "others",
