@@ -30,7 +30,7 @@ module.exports = {
         const publicDir = path.join(__dirname, "../public");
         app.use(express.static(publicDir));
 
-        app.use((request, response) => {
+        app.use((request, response, next) => {
             if (request.method !== "GET") return;
 
             // parse the author's filename
@@ -44,13 +44,13 @@ module.exports = {
             const endpoint = isolateEndpoint(request.url);
             switch (endpoint) {
                 case "/":
-                    views.showIndex(response, authorFileName);
+                    views.showIndex(response, authorFileName, next);
                     break;
                 case "contact":
-                    views.showContact(response, authorFileName);
+                    views.showContact(response, authorFileName, next);
                     break;
                 case "others":
-                    views.showOthers(response, authorFileName);
+                    views.showOthers(response, authorFileName, next);
                     break;
                 default:
                     const message = `404: page not found "${request.url}".`;

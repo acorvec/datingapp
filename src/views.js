@@ -6,7 +6,7 @@ const cssGen = require("./cssGen.js");
 
 const pug = require("pug");
 
-function showErr(response, message) {
+function showErr(response, message, next) {
     const viewName = "err";
 
     const darkModeStylePath = `../public/style/${viewName}/dark.css`;
@@ -20,24 +20,31 @@ function showErr(response, message) {
         darkModeStyles: darkModeStyles,
         lightModeStyles: lightModeStyles,
     };
+
+    const error = new Error('Not Found');
+    error.status = 404;
+    response.status(404);
     response.render("err", options);
+    next(error);
 }
 
 function showView(
     response,
     authorFileName,
     viewName,
+    next,
     requiresOtherUsers = false
 ) {
     const loadedAuthor = author.parseFromFile(
         showErr,
         response,
-        authorFileName
+        authorFileName,
+        next
     );
     if (loadedAuthor === undefined) return;
     if (loadedAuthor.accountDisabled) {
         const message = `${loadedAuthor.name}'s account is disabled.`;
-        showErr(response, message);
+        showErr(response, message, next);
         return;
     }
 
@@ -52,7 +59,12 @@ function showView(
 
     let otherUsers = undefined;
     if (requiresOtherUsers) {
-        otherUsers = author.loadOthers(showErr, response, authorFileName);
+        otherUsers = author.loadOthers(
+            showErr, 
+            response, 
+            authorFileName, 
+            next
+        );
         // if the loading failed,
         // then the loading function displays an error and returns undefined;
         // we should stop the function, as a page is already loaded
@@ -72,17 +84,18 @@ function showView(
 
 module.exports = {
     showErr: showErr,
-    showIndex: (response, authorFileName) => {
-        showView(response, authorFileName, "index");
+    showIndex: (response, authorFileName, next) => {
+        showView(response, authorFileName, "index", next);
     },
-    showContact: (response, authorFileName) => {
-        showView(response, authorFileName, "contact");
+    showContact: (response, authorFileName, next) => {
+        showView(response, authorFileName, "contact", next);
     },
-    showOthers: (response, authorFileName) => {
+    showOthers: (response, authorFileName, next) => {
         showView(
             response,
             authorFileName,
             "others",
+            next,
             (requiresOtherUsers = true)
         );
     },

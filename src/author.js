@@ -21,12 +21,12 @@ function parseFromJson(jsonText) {
     return result;
 }
 
-function parseFromFile(showErr, response, fileName) {
+function parseFromFile(showErr, response, fileName, next) {
     const userPath = `../users/${fileName}.json`;
     const jsonText = helper.readFile(userPath);
     if (jsonText === undefined) {
         const message = `404: author not found "${fileName}".`;
-        showErr(response, message);
+        showErr(response, message, next);
         return undefined;
     }
 
@@ -42,7 +42,7 @@ function parseFromFile(showErr, response, fileName) {
     return result;
 }
 
-function loadOthers(showErr, response, fileNameToExclude) {
+function loadOthers(showErr, response, fileNameToExclude, next) {
     // get the directory listing
     const directoryListing = fs.readdirSync("users");
 
@@ -53,7 +53,7 @@ function loadOthers(showErr, response, fileNameToExclude) {
     // push the author if their account isn't disabled;
     // keep track of whether or not the author failed to load
     const pushOther = (index, fileName) => {
-        const other = parseFromFile(showErr, response, fileName);
+        const other = parseFromFile(showErr, response, fileName, next);
         if (!other.accountDisabled) result[index] = other;
         return other !== undefined;
     };
