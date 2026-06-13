@@ -1,8 +1,8 @@
 function initialize(app) {
-    const requests = require("./appCalls.js");
+    const setup = require("./setup.js");
 
-    requests.setCalls(app);
-    requests.useCalls(app);
+    setup.setCalls(app);
+    setup.useCalls(app);
 
     app.listen(3000);
 }
