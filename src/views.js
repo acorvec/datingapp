@@ -1,4 +1,4 @@
-const author = require("./author.js");
+const user = require("./user.js");
 const helper = require("./helper.js");
 
 const pugGen = require("./pugGen.js");
@@ -34,15 +34,15 @@ async function showErr(response, message, next) {
 
 async function showView(
     response,
-    authorFileName,
+    userFileName,
     viewName,
     next,
     requiresOtherUsers = false
 ) {
-    const loadedAuthor = await author.parseFromFile(
+    const loadedAuthor = await user.parseFromFile(
         showErr,
         response,
-        authorFileName,
+        userFileName,
         next
     );
     if (loadedAuthor === undefined) return;
@@ -69,10 +69,10 @@ async function showView(
 
     let otherUsers = undefined;
     if (requiresOtherUsers) {
-        otherUsers = await author.loadOthers(
+        otherUsers = await user.loadOthers(
             showErr, 
             response, 
-            authorFileName, 
+            userFileName, 
             next
         );
         // if the loading failed,
@@ -81,7 +81,7 @@ async function showView(
         if (otherUsers === undefined) return;
     }
     const options = {
-        author: loadedAuthor,
+        user: loadedAuthor,
         styles: styles,
         admin: admin,
         otherUsers: otherUsers,
@@ -94,16 +94,16 @@ async function showView(
 
 module.exports = {
     showErr: showErr,
-    showIndex: async (response, authorFileName, next) => {
-        await showView(response, authorFileName, "index", next);
+    showIndex: async (response, userFileName, next) => {
+        await showView(response, userFileName, "index", next);
     },
-    showContact: async (response, authorFileName, next) => {
-        await showView(response, authorFileName, "contact", next);
+    showContact: async (response, userFileName, next) => {
+        await showView(response, userFileName, "contact", next);
     },
-    showOthers: async (response, authorFileName, next) => {
+    showOthers: async (response, userFileName, next) => {
         await showView(
             response,
-            authorFileName,
+            userFileName,
             "others",
             next,
             (requiresOtherUsers = true)

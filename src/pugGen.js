@@ -4,9 +4,9 @@ function selectTitle(viewName) {
     const indexViewName = "index";
     switch (viewName) {
         case "contact":
-            return "Contact #{author.name}";
+            return "Contact #{user.name}";
         case indexViewName:
-            return "#{author.name}, #{author.age}";
+            return "#{user.name}, #{user.age}";
         case "others":
             return "Other Singles";
         default:

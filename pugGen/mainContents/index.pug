@@ -1,9 +1,9 @@
     #mainContent
-        - const altText = "A picture of " + author.name
-        img#mainPicture(src="/" + author.mainImage, alt=altText)
+        - const altText = "A picture of " + user.name
+        img#mainPicture(src="/" + user.mainImage, alt=altText)
         h1
-            span#authorName #{author.name}
-            span#authorAge , #{author.age}
+            span#userName #{user.name}
+            span#userAge , #{user.age}
 
         - const checkForLink = (bio, paragraphIndex) => {
         -   // check if the current paragraph index is a link
@@ -24,7 +24,7 @@
         -   const range = characterRange;
         -   return paragraph.substring(range.end);
         - }
-        each bio in author.bios
+        each bio in user.bios
             if bio.precedingImage !== undefined
                 img.bioPicture(src="/" + bio.precedingImage, alt=altText)
             h2.bioLabel= bio.title
@@ -68,27 +68,27 @@
         -   else return noPreferenceMessage;
         - };
         ul 
-            - const shrug = getShrug(author.gender);
+            - const shrug = getShrug(user.gender);
 
             - const noPreferenceMessage = "No preference " + shrug;
 
-            - const kidsPreference = calculateKids(author.preferences.kids);
+            - const kidsPreference = calculateKids(user.preferences.kids);
             li.preference Kids: #{kidsPreference}
 
-            - const cookedIncome = calculateIncome(author.preferences.income);
+            - const cookedIncome = calculateIncome(user.preferences.income);
             li.preference Income: #{cookedIncome}
 
-            - const uncookedEducation = author.preferences.education;
+            - const uncookedEducation = user.preferences.education;
             - const cookedEducation = calculateEducation(uncookedEducation);
             li.preference Education: #{cookedEducation}
 
-            li.preference Dealbreaker: #{author.preferences.dealbreaker} 🚫
+            li.preference Dealbreaker: #{user.preferences.dealbreaker} 🚫
 
         h2#interestsLabel= "Interests"
         ul
-            each interest in author.interests 
+            each interest in user.interests 
                 li.interest= interest
 
         h2#contactLabel= "Contact"
-        each contactParagraph in author.contact
+        each contactParagraph in user.contact
             p.contactParagraph= contactParagraph

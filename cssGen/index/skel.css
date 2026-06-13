@@ -5,11 +5,11 @@ h1 {
     margin-bottom: 15vw;
 }
 
-span#authorName {
+span#userName {
     font-weight: 600;
 }
 
-span#authorAge {
+span#userAge {
     font-weight: 400;
 }
 
@@ -56,11 +56,11 @@ img.bioPicture {
         margin-bottom: 10vh;
     }
 
-    span#authorName {
+    span#userName {
         font-size: 4.5vh;
     }
 
-    span#authorAge {
+    span#userAge {
         font-size: 4.5vh;
     }
 

@@ -25,7 +25,7 @@ async function parseFromFile(showErr, response, fileName, next) {
     const userPath = `../users/${fileName}.json`;
     const jsonText = await helper.readFile(userPath);
     if (jsonText === undefined) {
-        const message = `404: author not found "${fileName}".`;
+        const message = `404: user not found "${fileName}".`;
         await showErr(response, message, next);
         return undefined;
     }
@@ -50,8 +50,8 @@ async function loadOthers(showErr, response, fileNameToExclude, next) {
     const expectedCount = directoryListing.length - 1;
     const result = helper.arrayOfUndefined(expectedCount);
 
-    // push the author if their account isn't disabled;
-    // keep track of whether or not the author failed to load
+    // push the user if their account isn't disabled;
+    // keep track of whether or not the user failed to load
     const pushOther = async (index, fileName) => {
         const other = await parseFromFile(showErr, response, fileName, next);
         if (!other.accountDisabled) result[index] = other;

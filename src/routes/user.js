@@ -4,15 +4,15 @@ const router = express.Router();
 const views = require("../views.js");
 
 const getAuthorFilename = (request) => {
-    let authorFileName = 'andrew';
+    let userFileName = 'andrew';
     if (request.params && request.params.name) 
-        authorFileName = request.params.name;
+        userFileName = request.params.name;
 
-    return { authorFileName: authorFileName };
+    return { userFileName: userFileName };
 };
 const indexFn = async (request, response, next) => {
     const obj = getAuthorFilename(request);
-    await views.showIndex(response, obj['authorFileName'], next);
+    await views.showIndex(response, obj['userFileName'], next);
 };
 
 const contactPattern = '/:name/profile/contact';
@@ -22,11 +22,11 @@ const rootPath = '/user';
 
 router.get(contactPattern, async (request, response, next) => {
     const obj = getAuthorFilename(request);
-    await views.showContact(response, obj['authorFileName'], next);
+    await views.showContact(response, obj['userFileName'], next);
 });
 router.get(othersPattern, async (request, response, next) => {
     const obj = getAuthorFilename(request);
-    await views.showOthers(response, obj['authorFileName'], next);
+    await views.showOthers(response, obj['userFileName'], next);
 });
 router.get('/:name/', indexFn);
 
