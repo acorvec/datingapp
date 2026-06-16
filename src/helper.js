@@ -17,7 +17,7 @@ async function readFile(path) {
     try {
         return await fs.readFile(resolve(path), "utf-8");
     } catch (err) {
-        return undefined;
+        return null;
     }
 }
 
@@ -25,7 +25,7 @@ function parseJson(jsonText) {
     try {
         return JSON.parse(jsonText);
     } catch (err) {
-        return undefined;
+        return null;
     }
 }
 

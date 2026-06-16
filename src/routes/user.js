@@ -32,7 +32,7 @@ router.get('/:name/', indexFn);
 
 router.get('*', async (request, response, next) => {
     const message = `404: page not found "${rootPath + request.url}".`;
-    await views.showErr(response, message, next);
+    next(new Error(message));
 });
 
 module.exports = {

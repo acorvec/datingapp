@@ -12,12 +12,16 @@ async function showErr(response, message, next) {
     const darkModeStylePath = `../public/style/${viewName}/dark.css`;
     const lightModeStylePath = `../public/style/${viewName}/light.css`;
 
-    const promises = [
-        helper.readFile(darkModeStylePath), 
-        helper.readFile(lightModeStylePath)
-    ];
-    const darkModeStyles = await promises[0];
-    const lightModeStyles = await promises[1];
+    let [darkModeStyles, lightModeStyles] = ['', ''];
+    try {
+        const promises = [
+            helper.readFile(darkModeStylePath), 
+            helper.readFile(lightModeStylePath)
+        ];
+        [darkModeStyles, lightModeStyles] = Promise.all(promises);
+    } catch (error) {
+        next(new Error('unable to load Error stylesheets.'));
+    }
 
     const options = {
         message: message,
@@ -25,9 +29,7 @@ async function showErr(response, message, next) {
         lightModeStyles: lightModeStyles,
     };
 
-    const error = new Error('Not Found');
-    error.status = 404;
-    response.status(404);
+    const error = new Error(message);
     response.render("err", options);
     next(error);
 }
@@ -39,46 +41,42 @@ async function showView(
     next,
     requiresOtherUsers = false
 ) {
-    const loadedAuthor = await user.parseFromFile(
-        showErr,
-        response,
-        userFileName,
-        next
-    );
-    if (loadedAuthor === undefined) return;
+    let loadedAuthor = {};
+    try {
+        loadedAuthor = await user.parseFromFile(response, userFileName);
+    } catch (error) { return next(error); }
+
     if (loadedAuthor.accountDisabled) {
         const message = `${loadedAuthor.name}'s account is disabled.`;
-        await showErr(response, message, next);
-        return;
+        return next(new Error(message));
     }
 
-    const promises = [
-        cssGen(viewName, "skel"),
-        cssGen(viewName, "dark"),
-        cssGen(viewName, "light")
-    ];
+    let styles = {};
+    try {
+        const [skel, dark, light] = await Promise.all([
+            cssGen(viewName, 'skel'),
+            cssGen(viewName, 'dark'),
+            cssGen(viewName, 'light'),
+        ]);
+        styles = { skel, dark, light };
+    } catch (error) { return next(error); }
 
-    const styles = {
-        skel: await promises[0],
-        dark: await promises[1],
-        light: await promises[2]
-    };
+    const adminPath = "../meta/admin.json";
+    const adminText = await helper.readFile(adminPath);
+    if (adminText === null) 
+        return next(new Error(`unable to read file at "${adminPath}".`));
 
-    const adminText = await helper.readFile("../meta/admin.json");
     const admin = helper.parseJson(adminText);
+    if (admin === null)
+        return next(new Error(`unable to parse JSON at "${adminPath}".`));
 
     let otherUsers = undefined;
     if (requiresOtherUsers) {
         otherUsers = await user.loadOthers(
-            showErr, 
             response, 
             userFileName, 
             next
         );
-        // if the loading failed,
-        // then the loading function displays an error and returns undefined;
-        // we should stop the function, as a page is already loaded
-        if (otherUsers === undefined) return;
     }
     const options = {
         user: loadedAuthor,
@@ -87,7 +85,11 @@ async function showView(
         otherUsers: otherUsers,
     };
 
-    const gennedPug = await pugGen(viewName);
+    let gennedPug = {};
+    try {
+        gennedPug = await pugGen(viewName);
+    } catch (error) { return next(error); }
+
     const renderedDoc = pug.render(gennedPug, options);
     response.send(renderedDoc);
 }

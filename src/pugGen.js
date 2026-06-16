@@ -16,6 +16,12 @@ function selectTitle(viewName) {
 
 async function generateBeginning(viewName) {
     let result = await helper.readFile("../pugGen/beginning.pug");
+    if (result === null) {
+        const message = [
+            `Unable to load beginning pug file for view "${viewName}".`
+        ].join('');
+        throw new Error(message);
+    }
 
     result = result.replaceAll("%title", selectTitle(viewName));
     result = result.replaceAll("%viewName", viewName);
@@ -26,11 +32,23 @@ async function generateBeginning(viewName) {
 async function generateMiddle(viewName) {
     const filePath = `../pugGen/mainContents/${viewName}.pug`;
     const result = await helper.readFile(filePath);
+    if (result === null) {
+        const message = [
+            `Unable to load middle pug file for view "${viewName}".`
+        ].join('');
+        throw new Error(message);
+    }
     return helper.indentText(result, 2);
 }
 
 async function generateEnd(viewName) {
     const result = await helper.readFile("../pugGen/end.pug");
+    if (result === null) {
+        const message = [
+            `Unable to load end pug file for view "${viewName}".`
+        ].join('');
+        throw new Error(message);
+    }
     return helper.indentText(result, 2);
 }
 

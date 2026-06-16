@@ -16,7 +16,11 @@ module.exports = {
 
         app.get('*', async (request, response, next) => {
             const message = `404: page not found "${request.url}".`;
-            await views.showErr(response, message, next);
+            next(new Error(message));
+        });
+        app.use(async (error, request, response, next) => {
+            await views.showErr(response, error.message, next);
+            next(error);
         });
     },
 };

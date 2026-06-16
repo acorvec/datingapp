@@ -13,63 +13,55 @@ function calculateAge(bday) {
 }
 
 function parseFromJson(jsonText) {
-    let result = helper.parseJson(jsonText);
-    if (result === undefined) return undefined;
+    const result = helper.parseJson(jsonText);
+    if (result === null) return null;
 
     const bday = new Date(result.birthday);
     result.age = calculateAge(bday);
     return result;
 }
 
-async function parseFromFile(showErr, response, fileName, next) {
+async function parseFromFile(response, fileName) {
     const userPath = `../users/${fileName}.json`;
     const jsonText = await helper.readFile(userPath);
-    if (jsonText === undefined) {
+    if (jsonText === null) {
         const message = `404: user not found "${fileName}".`;
-        await showErr(response, message, next);
-        return undefined;
+        throw new Error(message);
     }
 
     const result = parseFromJson(jsonText);
-    if (result === undefined) {
+    if (result === null) {
         const resolvedPath = helper.resolve(userPath);
         const message = `Unable to parse JSON at path "${resolvedPath}"`;
-        await showErr(response, message, next);
-        return undefined;
+        throw new Error(message);
     }
 
     result.fileName = fileName;
     return result;
 }
 
-async function loadOthers(showErr, response, fileNameToExclude, next) {
-    // get the directory listing
+async function loadOthers(response, fileNameToExclude, next) {
     const directoryListing = await fs.readdir("users");
 
-    // pre-allocate an array of the expected size
-    const expectedCount = directoryListing.length - 1;
-    const result = helper.arrayOfUndefined(expectedCount);
-
-    // push the user if their account isn't disabled;
-    // keep track of whether or not the user failed to load
-    const pushOther = async (index, fileName) => {
-        const other = await parseFromFile(showErr, response, fileName, next);
-        if (!other.accountDisabled) result[index] = other;
-        return other !== undefined;
+    const result = [];
+    const pushOther = async (fileName) => {
+        let other = undefined;
+        try {
+            other = await parseFromFile(response, fileName, next);
+        } catch { 
+            next(new Error(`user "${fileName}" failed to load.`));
+        }
+        if (!other.accountDisabled) result.push(other);
     };
 
-    for (const index in directoryListing) {
-        const fileSplit = directoryListing[index].split(".");
+    for (const path of directoryListing) {
+        const fileSplit = path.split(".");
         const fileName = fileSplit[0];
-        if (fileName !== fileNameToExclude) {
-            const succeeded = await pushOther(index, fileName);
-            if (!succeeded) return undefined;
-        }
+        if (fileName !== fileNameToExclude) 
+            pushOther(fileName);
     }
 
-    return result.filter((element) => {
-        return element !== undefined;
-    });
+    return result;
 }
 
 module.exports = {
