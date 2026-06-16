@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./app.js"
   },
   "user": "",
   "license": "ISC",
@@ -17,6 +18,7 @@
     "eslint": "^10.4.1",
     "eslint-plugin": "^1.0.1",
     "eslint-plugin-promise": "^7.3.0",
-    "globals": "^17.6.0"
+    "globals": "^17.6.0",
+    "nodemon": "^3.1.14"
   }
 }
