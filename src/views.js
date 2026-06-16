@@ -1,13 +1,29 @@
 const user = require("./user.js");
 const helper = require("./helper.js");
-
 const pugGen = require("./pugGen.js");
 const cssGen = require("./cssGen.js");
+const caches = require('./caches.js');
 
 const pug = require("pug");
 
 async function showErr(response, message, next) {
-    const viewName = "err";
+    const viewName = 'err';
+    const pugPath = '../pugGen/err.pug';
+
+    let pugText = await helper.readFile(pugPath);
+    if (pugText === null)
+        next(new Error(`unable to load file at "${pugPath}".`));
+
+    let script = null;
+
+    // it's probably important to keep the large replaceAlls 
+    // at the bottom to improve performance
+    script = await caches.darkScript;
+    if (script === null)
+        throw new Error(`unable to load file at "${caches.darkScriptPath}".`);
+
+    pugText = pugText.replace('%darkScript', script);
+    console.log(pugText.split('\n')[71]);
 
     const darkModeStylePath = `../public/style/${viewName}/dark.css`;
     const lightModeStylePath = `../public/style/${viewName}/light.css`;
@@ -25,12 +41,16 @@ async function showErr(response, message, next) {
 
     const options = {
         message: message,
-        darkModeStyles: darkModeStyles,
-        lightModeStyles: lightModeStyles,
+        styles: {
+            dark: darkModeStyles,
+            light: lightModeStyles,
+            skel: undefined
+        }
     };
 
     const error = new Error(message);
-    response.render("err", options);
+    const html = pug.render(pugText, options);
+    response.send(html);
     next(error);
 }
 

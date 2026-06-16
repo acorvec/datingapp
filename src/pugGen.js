@@ -1,4 +1,5 @@
 const helper = require("./helper.js");
+const caches = require('./caches.js');
 
 function selectTitle(viewName) {
     const indexViewName = "index";
@@ -23,8 +24,20 @@ async function generateBeginning(viewName) {
         throw new Error(message);
     }
 
+    // it's probably important to keep the large replaces 
+    // at the bottom to improve performance
     result = result.replaceAll("%title", selectTitle(viewName));
     result = result.replaceAll("%viewName", viewName);
+
+    let script = null;
+
+    // it's probably important to keep the large replaces 
+    // at the bottom to improve performance
+    script = await caches.darkScript;
+    if (script === null) 
+        throw new Error(`unable to load file at "${caches.darkScriptPath}".`);
+    
+    result = result.replace("%darkScript", script);
 
     return result;
 }

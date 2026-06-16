@@ -1,0 +1,12 @@
+html 
+    head 
+        title= "Error occurred"
+        link(rel="stylesheet" href="/style/err/skel.css")
+        link(rel="stylesheet" href="/style/err/dark.css")
+        script(type="text/javascript").
+%darkScript
+
+    body 
+        h1= "An error occurred."
+        p Error reason: #{message}
+        a(href="/")= "Go Home"
