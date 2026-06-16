@@ -2,7 +2,6 @@ const user = require("./user.js");
 const helper = require("./helper.js");
 const pugGen = require("./pugGen.js");
 const cssGen = require("./cssGen.js");
-const caches = require('./caches.js');
 
 const pug = require("pug");
 
@@ -14,16 +13,20 @@ async function showErr(response, message, next) {
     if (pugText === null)
         next(new Error(`unable to load file at "${pugPath}".`));
 
+    const darkScriptPath = './front/dark.mjs';
+    const darkScript =
+        helper.readFile(darkScriptPath).then((data) => {
+            return helper.indentText(data, 3);
+        });
+
     let script = null;
 
-    // it's probably important to keep the large replaceAlls 
+    // it's probably important to keep the large replaces 
     // at the bottom to improve performance
-    script = await caches.darkScript;
+    script = await darkScript;
     if (script === null)
-        throw new Error(`unable to load file at "${caches.darkScriptPath}".`);
-
+        throw new Error(`unable to load file at "${darkScriptPath}".`);
     pugText = pugText.replace('%darkScript', script);
-    console.log(pugText.split('\n')[71]);
 
     const darkModeStylePath = `../public/style/${viewName}/dark.css`;
     const lightModeStylePath = `../public/style/${viewName}/light.css`;

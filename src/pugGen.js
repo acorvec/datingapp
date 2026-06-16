@@ -1,5 +1,4 @@
 const helper = require("./helper.js");
-const caches = require('./caches.js');
 
 function selectTitle(viewName) {
     const indexViewName = "index";
@@ -24,18 +23,37 @@ async function generateBeginning(viewName) {
         throw new Error(message);
     }
 
+    let script = null;
+
+    const darkScriptPath = './front/dark.mjs';
+    const buttonScriptPath = './front/buttons.mjs';
+
+    const darkScript =
+        helper.readFile(darkScriptPath).then((data) => {
+            return helper.indentText(data, 3);
+        });
+    const buttonScript = 
+        helper.readFile(buttonScriptPath).then((data) => {
+            return helper.indentText(data, 3);
+        });
+
     // it's probably important to keep the large replaces 
     // at the bottom to improve performance
     result = result.replaceAll("%title", selectTitle(viewName));
     result = result.replaceAll("%viewName", viewName);
 
-    let script = null;
-
     // it's probably important to keep the large replaces 
     // at the bottom to improve performance
-    script = await caches.darkScript;
+    script = await buttonScript;
+    if (script === null) {
+        const message = `unable to load file at "${buttonScriptPath}".`;
+        throw new Error(message);
+    }
+    result = result.replace('%buttonScript', script);
+
+    script = await darkScript;
     if (script === null) 
-        throw new Error(`unable to load file at "${caches.darkScriptPath}".`);
+        throw new Error(`unable to load file at "${darkScriptPath}".`);
     
     result = result.replace("%darkScript", script);
 
