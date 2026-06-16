@@ -28,32 +28,32 @@ async function showErr(response, message, next) {
         throw new Error(`unable to load file at "${darkScriptPath}".`);
     pugText = pugText.replace('%darkScript', script);
 
-    const darkModeStylePath = `../public/style/${viewName}/dark.css`;
-    const lightModeStylePath = `../public/style/${viewName}/light.css`;
+    const darkModeStylePath = `../cssGen/err/dark.css`;
+    const lightModeStylePath = `../cssGen/err/light.css`;
+    const skelStylePath = `../cssGen/err/skel.css`;
 
-    let [darkModeStyles, lightModeStyles] = ['', ''];
+    let styles = {};
     try {
         const promises = [
             helper.readFile(darkModeStylePath), 
-            helper.readFile(lightModeStylePath)
+            helper.readFile(lightModeStylePath),
+            helper.readFile(skelStylePath)
         ];
-        [darkModeStyles, lightModeStyles] = Promise.all(promises);
+        const results = await Promise.all(promises);
+        styles = {
+            dark: results[0],
+            light: results[1],
+            skel: results[2]
+        };
     } catch (error) {
         next(new Error('unable to load Error stylesheets.'));
     }
 
-    const options = {
-        message: message,
-        styles: {
-            dark: darkModeStyles,
-            light: lightModeStyles,
-            skel: undefined
-        }
-    };
-
-    const error = new Error(message);
+    const options = { message, styles };
     const html = pug.render(pugText, options);
     response.send(html);
+    
+    const error = new Error(message);
     next(error);
 }
 
