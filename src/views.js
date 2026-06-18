@@ -40,10 +40,14 @@ async function showErr(response, message, next) {
             helper.readFile(skelStylePath)
         ];
         const results = await Promise.all(promises);
+        const towel = (message) => { throw new Error(message); };
         styles = {
-            dark: results[0],
-            light: results[1],
-            skel: results[2]
+            dark: results[0] ??
+                towel(`unable to read file at "${darkModeStylePath}".`),
+            light: results[1] ??
+                towel(`unable to read file at "${lightModeStylePath}".`),
+            skel: results[2] ??
+                towel(`unable to read file at "${skelStylePath}".`)
         };
     } catch (error) {
         next(new Error('unable to load Error stylesheets.'));
@@ -52,7 +56,7 @@ async function showErr(response, message, next) {
     const options = { message, styles };
     const html = pug.render(pugText, options);
     response.send(html);
-    
+
     const error = new Error(message);
     next(error);
 }
