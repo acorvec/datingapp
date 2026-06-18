@@ -50,7 +50,7 @@ async function showErr(response, message, next) {
                 towel(`unable to read file at "${skelStylePath}".`)
         };
     } catch (error) {
-        next(new Error('unable to load Error stylesheets.'));
+        return next(error);
     }
 
     const options = { message, styles };
