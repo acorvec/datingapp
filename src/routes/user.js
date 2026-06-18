@@ -92,15 +92,12 @@ const indexPattern = '/:name/';
 const rootPath = '/user';
 
 router.get(contactPattern, async (request, response, next) => {
-    const obj = getAuthorFilename(request);
     await showContact(response, request.params.name, next);
 });
 router.get(othersPattern, async (request, response, next) => {
-    const obj = getAuthorFilename(request);
     await showOthers(response, request.params.name, next);
 });
 router.get(indexPattern, async (request, response, next) => {
-    const obj = getAuthorFilename(request);
     await showIndex(response, request.params.name, next);
 });
 
