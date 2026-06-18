@@ -14,11 +14,12 @@ body {
 
 a.navbarLinks {
     color: rgb(5, 5, 25);
-    background-color: rgb(160, 160, 200);
+    background-color: rgb(135, 135, 200);
 }
 
 a.navbarLinks:hover {
-    background-color: rgb(140, 70, 30);
+    color: rgb(235, 235, 255);
+    background-color: rgb(190, 95, 40);
 }
 
 #footer {
