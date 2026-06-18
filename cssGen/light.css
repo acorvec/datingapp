@@ -13,8 +13,8 @@ body {
 }
 
 a.navbarLinks {
-    color: rgb(235, 235, 255);
-    background-color: rgb(50, 60, 110);
+    color: rgb(5, 5, 25);
+    background-color: rgb(160, 160, 200);
 }
 
 a.navbarLinks:hover {
