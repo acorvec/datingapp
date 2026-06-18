@@ -1,8 +1,8 @@
 function initialize(app) {
     const setup = require("./setup.js");
 
-    setup.setCalls(app);
-    setup.useCalls(app);
+    setup.sets(app);
+    setup.uses(app);
 
     app.listen(3000);
 }

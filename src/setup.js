@@ -4,10 +4,10 @@ const express = require("express");
 const views = require("./views.js");
 
 module.exports = {
-    setCalls: (app) => {
+    sets: (app) => {
         app.set("view engine", "pug");
     },
-    useCalls: (app) => {
+    uses: (app) => {
         const publicDir = path.join(__dirname, "../public");
         app.use(express.static(publicDir));
 

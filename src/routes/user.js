@@ -106,7 +106,4 @@ router.get('*', async (request, response, next) => {
     next(new Error(message));
 });
 
-module.exports = {
-    rootPath: rootPath,
-    router: router
-};
+module.exports = { rootPath: rootPath, outer: router };
