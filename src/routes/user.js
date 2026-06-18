@@ -1,11 +1,11 @@
 const express = require('express');
 const pug = require("pug");
 
-const user = require("../user.js");
+const user = require("../model/user.js");
 const helper = require("../helper.js");
 const views = require("../views.js");
-const cssGen = require("../cssGen.js");
-const pugGen = require("../pugGen.js");
+const cssGen = require("../view/cssGen.js");
+const pugGen = require("../view/pugGen.js");
 
 const router = express.Router();
 
@@ -106,4 +106,4 @@ router.get('*', async (request, response, next) => {
     next(new Error(message));
 });
 
-module.exports = { rootPath: rootPath, outer: router };
+module.exports = { rootPath: rootPath, router: router };

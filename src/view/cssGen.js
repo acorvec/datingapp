@@ -1,4 +1,4 @@
-const helper = require("./helper");
+const helper = require("../helper.js");
 
 async function readCssGenFile(filePath) {
     const abs = `../cssGen/${filePath}.css`;

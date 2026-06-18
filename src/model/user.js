@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
-const helper = require("./helper.js");
+
+const helper = require("../helper.js");
 
 function calculateAge(bday) {
     const today = new Date();
