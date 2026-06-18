@@ -4,13 +4,8 @@ function resolve(path) {
     try {
         return require.resolve(path);
     } catch (err) {
-        return undefined;
+        return null;
     }
-}
-
-function arrayOfUndefined(length) {
-    const result = new Array(length);
-    return result.fill(undefined);
 }
 
 async function readFile(path) {
@@ -41,9 +36,8 @@ function indentText(text, amount, spaceCount = 4) {
 }
 
 module.exports = {
-    resolve: resolve,
-    arrayOfUndefined: arrayOfUndefined,
-    readFile: readFile,
-    parseJson: parseJson,
-    indentText: indentText,
+    resolve,
+    readFile,
+    parseJson,
+    indentText,
 };

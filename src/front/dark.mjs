@@ -20,18 +20,13 @@ if (initialThemeStorage) {
 }
 else log("initial theme is unset");
 
-function arrayOfUndefined() {
-    const result = new Array(length);
-    return result.fill(undefined);
-}
-
 function pagePath() {
     const splitted = window.location.href.split('/');
     const startIndex = 3;
     const length = splitted.length - startIndex;
     const endIndex = startIndex + length;
 
-    const tokens = arrayOfUndefined(length);
+    const tokens = [];
     for (let i = startIndex; i < endIndex; i++)
         tokens[i - startIndex] = splitted[i];
     return '/' + tokens.join('/');

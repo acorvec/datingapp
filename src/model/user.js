@@ -32,8 +32,7 @@ async function parseFromFile(response, fileName) {
 
     const result = parseFromJson(jsonText);
     if (result === null) {
-        const resolvedPath = helper.resolve(userPath);
-        const message = `Unable to parse JSON at path "${resolvedPath}"`;
+        const message = `Unable to parse JSON at path "${userPath}"`;
         throw new Error(message);
     }
 
