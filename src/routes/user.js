@@ -16,13 +16,13 @@ async function showView(
     next,
     requiresOtherUsers = false
 ) {
-    let loadedAuthor = {};
+    let loadedUser = {};
     try {
-        loadedAuthor = await user.parseFromFile(response, userFileName);
+        loadedUser = await user.parseFromFile(response, userFileName);
     } catch (error) { return next(error); }
 
-    if (loadedAuthor.accountDisabled) {
-        const message = `${loadedAuthor.name}'s account is disabled.`;
+    if (loadedUser.accountDisabled) {
+        const message = `${loadedUser.name}'s account is disabled.`;
         return next(new Error(message));
     }
 
@@ -54,7 +54,7 @@ async function showView(
         );
     }
     const options = {
-        user: loadedAuthor,
+        user: loadedUser,
         styles: styles,
         admin: admin,
         otherUsers: otherUsers,
