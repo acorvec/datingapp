@@ -85,14 +85,6 @@ const showOthers = async (response, userFileName, next) => {
     );
 };
 
-const getAuthorFilename = (request) => {
-    let userFileName = 'andrew';
-    if (request.params && request.params.name) 
-        userFileName = request.params.name;
-
-    return { userFileName: userFileName };
-};
-
 const contactPattern = '/:name/profile/contact';
 const othersPattern = '/:name/profile/others';
 const indexPattern = '/:name/';
@@ -101,15 +93,15 @@ const rootPath = '/user';
 
 router.get(contactPattern, async (request, response, next) => {
     const obj = getAuthorFilename(request);
-    await showContact(response, obj['userFileName'], next);
+    await showContact(response, request.params.name, next);
 });
 router.get(othersPattern, async (request, response, next) => {
     const obj = getAuthorFilename(request);
-    await showOthers(response, obj['userFileName'], next);
+    await showOthers(response, request.params.name, next);
 });
 router.get(indexPattern, async (request, response, next) => {
     const obj = getAuthorFilename(request);
-    await showIndex(response, obj['userFileName'], next);
+    await showIndex(response, request.params.name, next);
 });
 
 router.get('*', async (request, response, next) => {
